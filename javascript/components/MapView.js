@@ -6,9 +6,9 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import {debounce} from 'debounce';
+import { debounce } from 'debounce';
 
-import {makePoint, makeLatLngBounds} from '../utils/geoUtils';
+import { makePoint, makeLatLngBounds } from '../utils/geoUtils';
 import {
   isFunction,
   isNumber,
@@ -16,7 +16,7 @@ import {
   isAndroid,
   viewPropTypes,
 } from '../utils';
-import {getFilter} from '../utils/filterUtils';
+import { getFilter } from '../utils/filterUtils';
 import Logger from '../utils/Logger';
 
 import NativeBridgeComponent from './NativeBridgeComponent';
@@ -33,7 +33,7 @@ export const NATIVE_MODULE_NAME = 'RCTMGLMapView';
 export const ANDROID_TEXTURE_NATIVE_MODULE_NAME = 'RCTMGLAndroidTextureMapView';
 
 const styles = StyleSheet.create({
-  matchParent: {flex: 1},
+  matchParent: { flex: 1 },
 });
 
 /**
@@ -115,10 +115,10 @@ class MapView extends NativeBridgeComponent(React.Component) {
      * Adds attribution offset, e.g. `{top: 8, left: 8}` will put attribution button in top-left corner of the map
      */
     attributionPosition: PropTypes.oneOfType([
-      PropTypes.shape({top: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({top: PropTypes.number, right: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, left: PropTypes.number}),
-      PropTypes.shape({bottom: PropTypes.number, right: PropTypes.number}),
+      PropTypes.shape({ top: PropTypes.number, left: PropTypes.number }),
+      PropTypes.shape({ top: PropTypes.number, right: PropTypes.number }),
+      PropTypes.shape({ bottom: PropTypes.number, left: PropTypes.number }),
+      PropTypes.shape({ bottom: PropTypes.number, right: PropTypes.number }),
     ]),
 
     /**
@@ -542,6 +542,24 @@ class MapView extends NativeBridgeComponent(React.Component) {
   }
 
   /**
+ * Calls the method setVisibleCoordinatesBounds
+ *
+ * @example
+ * this._map.setVisibleCoordinatesBounds(bounds, animated, zoomPadding)
+ *
+ * @param {CoordinateBounds} bounds - CoordinateBounds {sw:{latitude:number,longitude:number}, ne:{latitude:number,longitude:number}}
+ * @param {boolean} animated - Identifier of the target source (e.g. 'composite')
+ * @param {ZoomPadding} zoomPadding - {paddingTop:number,paddingBottom:number,paddingLeft:number,paddingRight:number}
+ */
+  setVisibleCoordinatesBounds(bounds, animated, zoomPadding) {
+    this._runNativeCommand('setVisibleCoordinatesBounds', this._nativeRef, [
+      bounds,
+      animated,
+      zoomPadding
+    ]);
+  }
+
+  /**
    * Show the attribution and telemetry action sheet.
    * If you implement a custom attribution button, you should add this action to the button.
    */
@@ -599,14 +617,14 @@ class MapView extends NativeBridgeComponent(React.Component) {
     if (isFunction(this.props.onRegionWillChange)) {
       this.props.onRegionWillChange(payload);
     }
-    this.setState({isUserInteraction: payload.properties.isUserInteraction});
+    this.setState({ isUserInteraction: payload.properties.isUserInteraction });
   }
 
   _onRegionDidChange(payload) {
     if (isFunction(this.props.onRegionDidChange)) {
       this.props.onRegionDidChange(payload);
     }
-    this.setState({region: payload});
+    this.setState({ region: payload });
   }
 
   _onChange(e) {
@@ -614,7 +632,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
       regionWillChangeDebounceTime,
       regionDidChangeDebounceTime,
     } = this.props;
-    const {type, payload} = e.nativeEvent;
+    const { type, payload } = e.nativeEvent;
     let propName = '';
 
     switch (type) {
@@ -776,7 +794,7 @@ class MapView extends NativeBridgeComponent(React.Component) {
 }
 
 const RCTMGLMapView = requireNativeComponent(NATIVE_MODULE_NAME, MapView, {
-  nativeOnly: {onMapChange: true, onAndroidCallback: true},
+  nativeOnly: { onMapChange: true, onAndroidCallback: true },
 });
 
 let RCTMGLAndroidTextureMapView;
@@ -785,7 +803,7 @@ if (isAndroid()) {
     ANDROID_TEXTURE_NATIVE_MODULE_NAME,
     MapView,
     {
-      nativeOnly: {onMapChange: true, onAndroidCallback: true},
+      nativeOnly: { onMapChange: true, onAndroidCallback: true },
     },
   );
 }
