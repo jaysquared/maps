@@ -337,7 +337,9 @@ public class RCTMGLModule extends ReactContextBaseJavaModule {
             @Override
             public void run() {
                 TelemetryDefinition telemetry = Mapbox.getTelemetry();
-                telemetry.setUserTelemetryRequestState(telemetryEnabled);
+                if (telemetry != null) {
+                    telemetry.setUserTelemetryRequestState(telemetryEnabled);
+                }
             }
         });
     }
