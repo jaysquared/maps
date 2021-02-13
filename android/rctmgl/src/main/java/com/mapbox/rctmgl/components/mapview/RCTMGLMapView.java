@@ -97,7 +97,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         MapView.OnWillStartRenderingFrameListener, MapView.OnDidFinishRenderingFrameListener,
         MapView.OnWillStartRenderingMapListener, MapView.OnDidFinishRenderingMapListener,
         MapView.OnDidFinishLoadingStyleListener, MapView.OnStyleImageMissingListener {
-    public static final String LOG_TAG = RCTMGLMapView.class.getSimpleName();
+    public static final String LOG_TAG = "RCTMGLMapView";
 
     private RCTMGLMapViewManager mManager;
     private Context mContext;
@@ -1088,7 +1088,7 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
                     uiSettings.setCompassGravity(Gravity.TOP | Gravity.END);
                     break;
                 case 2:
-                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
+                    uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.START);
                     break;
                 case 3:
                     uiSettings.setCompassGravity(Gravity.BOTTOM | Gravity.END);
@@ -1375,7 +1375,10 @@ public class RCTMGLMapView extends MapView implements OnMapReadyCallback, Mapbox
         coords.putDouble("latitude", location.getLatitude());
         coords.putDouble("altitude", location.getAltitude());
         coords.putDouble("accuracy", location.getAccuracy());
-        coords.putDouble("heading", location.getBearing());
+        // A better solution will be to pull the heading from the compass engine, 
+        // unfortunately the api is not publicly available in the mapbox sdk
+        coords.putDouble("heading", location.getBearing()); 
+        coords.putDouble("course", location.getBearing());
         coords.putDouble("speed", location.getSpeed());
 
         positionProperties.putMap("coords", coords);
